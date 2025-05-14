@@ -1,0 +1,20 @@
+modules = ["nodejs-20", "web"]
+run = "npm install --save-dev vite"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "npm install --save-dev vite"]
+
+[workflows]
+runButton = "dev"
+
+[[workflows.workflow]]
+name = "dev"
+author = 42678621
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx vite"
