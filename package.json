@@ -3,9 +3,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "node dist/index.js"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "vite": "^6.3.5"
   }
+}
 }
