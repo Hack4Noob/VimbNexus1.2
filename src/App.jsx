@@ -5,12 +5,14 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 
 const firebaseConfig = {
   // Substitua com suas configuraÃ§Ãµes do Firebase
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  
+    apiKey: "AIzaSyAP3Sy1PB0m_EpKifOpUd7tc1_eAKF2alM",
+    authDomain: "vimbalambi-news.firebaseapp.com",
+    databaseURL: "https://vimbalambi-news-default-rtdb.firebaseio.com",
+    projectId: "vimbalambi-news",
+    storageBucket: "vimbalambi-news.appspot.com",
+    messagingSenderId: "212254517932",
+    appId: "1:212254517932:web:d061c943f90b4c4e204d09"
 }
 
 const app = initializeApp(firebaseConfig)
