@@ -205,6 +205,12 @@ body {
   border-radius: 0 0 8px 8px;
 }
 
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
 .card-stats {
   display: flex;
   gap: 15px;

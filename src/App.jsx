@@ -17,8 +17,11 @@ function App() {
   const [newsData, setNewsData] = useState([])
   const [calculation, setCalculation] = useState('')
   const [calcResult, setCalcResult] = useState('')
+  const [activeSubcategory, setActiveSubcategory] = useState('anime')
+  const [loading, setLoading] = useState(false)
 
   const fetchAnimeData = async () => {
+    setLoading(true)
     try {
       const response = await axios.get('https://api.jikan.moe/v4/top/anime')
       setAnimeData(response.data.data.slice(0, 10))
@@ -65,7 +68,7 @@ function App() {
 
   const fetchNewsData = async () => {
     try {
-      const response = await axios.get('https://newsapi.org/v2/top-headlines?country=ao')
+      const response = await axios.get('https://newsapi.org/v2/top-headlines?country=ao&category=general&pageSize=10')
       setNewsData(response.data.articles)
     } catch (error) {
       console.error('Error fetching news:', error)
