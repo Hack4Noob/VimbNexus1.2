@@ -38,7 +38,7 @@ function App() {
 
   const fetchGamesData = async () => {
     try {
-      const response = await axios.get('https://api.rawg.io/api/games?key=YOUR_API_KEY')
+      const response = await axios.get('https://api.rawg.io/api/games')
       setGamesData(response.data.results)
     } catch (error) {
       console.error('Error fetching games:', error)
@@ -65,7 +65,7 @@ function App() {
 
   const fetchNewsData = async () => {
     try {
-      const response = await axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=YOUR_API_KEY')
+      const response = await axios.get('https://newsapi.org/v2/top-headlines?country=ao')
       setNewsData(response.data.articles)
     } catch (error) {
       console.error('Error fetching news:', error)
