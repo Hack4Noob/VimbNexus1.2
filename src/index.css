@@ -18,6 +18,42 @@ body {
   margin: 0 auto;
 }
 
+.auth-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.auth-form input {
+  padding: 12px;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+}
+
+.switch-auth {
+  background: none;
+  border: none;
+  color: #0095f6;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.error {
+  color: #ed4956;
+  text-align: center;
+  margin: 10px 0;
+}
+
 .header {
   position: fixed;
   top: 0;

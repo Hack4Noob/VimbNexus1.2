@@ -3,7 +3,19 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 function App() {
+  const [user, setUser] = useState(null);
   const [activeCategory, setActiveCategory] = useState('feed')
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (!user) {
+    return <Auth />;
+  }
   const [newPost, setNewPost] = useState('')
   const [musicSearch, setMusicSearch] = useState('')
   const [musicResults, setMusicResults] = useState([])
