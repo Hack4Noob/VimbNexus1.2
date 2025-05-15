@@ -30,8 +30,20 @@ function App() {
     }
   ])
 
+  const [selectedMedia, setSelectedMedia] = useState(null)
+  const [editingMedia, setEditingMedia] = useState(false)
+
+  const handleMediaSelect = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => setSelectedMedia(e.target.result)
+      reader.readAsDataURL(file)
+    }
+  }
+
   const handleNewPost = () => {
-    if (!newPost.trim()) return
+    if (!newPost.trim() && !selectedMedia) return
     
     const post = {
       id: posts.length + 1,
@@ -40,6 +52,7 @@ function App() {
         avatar: 'https://i.pravatar.cc/150?img=3'
       },
       content: newPost,
+      media: selectedMedia,
       likes: 0,
       comments: 0,
       timestamp: 'agora'
@@ -47,6 +60,8 @@ function App() {
     
     setPosts([post, ...posts])
     setNewPost('')
+    setSelectedMedia(null)
+    setEditingMedia(false)
   }
 
   return (
@@ -73,12 +88,43 @@ function App() {
 
         <div className="post-form">
           <img src="https://i.pravatar.cc/150?img=3" alt="Your avatar" />
-          <textarea 
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-            placeholder="No que você está pensando?"
-          />
-          <button onClick={handleNewPost}>Publicar</button>
+          <div className="post-form-content">
+            <textarea 
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              placeholder="No que você está pensando?"
+            />
+            
+            {selectedMedia && (
+              <div className="media-preview">
+                <img src={selectedMedia} alt="Preview" />
+                {editingMedia && (
+                  <div className="media-editor">
+                    <button onClick={() => {/* Adicionar filtros */}}>Filtros</button>
+                    <button onClick={() => {/* Adicionar corte */}}>Cortar</button>
+                    <button onClick={() => {/* Adicionar texto */}}>Texto</button>
+                    <button onClick={() => {/* Adicionar efeitos */}}>Efeitos</button>
+                  </div>
+                )}
+                <button className="edit-media" onClick={() => setEditingMedia(!editingMedia)}>
+                  ✏️ Editar
+                </button>
+              </div>
+            )}
+            
+            <div className="post-actions">
+              <label className="media-button">
+                📷 Foto/Vídeo
+                <input 
+                  type="file" 
+                  accept="image/*,video/*" 
+                  onChange={handleMediaSelect}
+                  style={{display: 'none'}}
+                />
+              </label>
+              <button onClick={handleNewPost}>Publicar</button>
+            </div>
+          </div>
         </div>
 
         <div className="feed">
