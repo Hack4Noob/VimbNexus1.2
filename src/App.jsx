@@ -1,5 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { initializeApp } from 'firebase/app'
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+
+const firebaseConfig = {
+  // Substitua com suas configuraÃ§Ãµes do Firebase
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+}
+
+const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
+
+function Auth() {
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider()
+    signInWithPopup(auth, provider)
+  }
+
+  return (
+    <div className="auth-container">
+      <h2>Bem-vindo ao SocialApp</h2>
+      <button onClick={signInWithGoogle}>Entrar com Google</button>
+    </div>
+  )
+}
 
 function App() {
   const [user, setUser] = useState(null);
@@ -112,7 +141,7 @@ function App() {
     {
       id: 1,
       author: {
-        name: 'João Silva',
+        name: 'JoÃ£o Silva',
         avatar: 'https://i.pravatar.cc/150?img=1'
       },
       content: 'Primeiro post da rede!',
@@ -148,7 +177,7 @@ function App() {
     const post = {
       id: posts.length + 1,
       author: {
-        name: 'Você',
+        name: 'VocÃª',
         avatar: 'https://i.pravatar.cc/150?img=3'
       },
       content: newPost,
@@ -167,13 +196,13 @@ function App() {
       <header className="header">
         <h1>SocialApp</h1>
         <div className="header-icons">
-          <span onClick={() => setActiveCategory('feed')}>🏠</span>
-          <span onClick={() => setActiveCategory('geek')}>🎮</span>
-          <span onClick={() => setActiveCategory('sports')}>⚽</span>
-          <span onClick={() => setActiveCategory('health')}>🏥</span>
-          <span onClick={() => setActiveCategory('science')}>🔬</span>
-          <span onClick={() => setActiveCategory('news')}>📰</span>
-          <span onClick={() => setActiveCategory('music')}>🎵</span>
+          <span onClick={() => setActiveCategory('feed')}>ðŸ </span>
+          <span onClick={() => setActiveCategory('geek')}>ðŸŽ®</span>
+          <span onClick={() => setActiveCategory('sports')}>âš½</span>
+          <span onClick={() => setActiveCategory('health')}>ðŸ¥</span>
+          <span onClick={() => setActiveCategory('science')}>ðŸ”¬</span>
+          <span onClick={() => setActiveCategory('news')}>ðŸ“°</span>
+          <span onClick={() => setActiveCategory('music')}>ðŸŽµ</span>
         </div>
       </header>
 
@@ -181,10 +210,10 @@ function App() {
         <button className={activeCategory === 'feed' ? 'active' : ''} onClick={() => setActiveCategory('feed')}>Feed</button>
         <button className={activeCategory === 'geek' ? 'active' : ''} onClick={() => setActiveCategory('geek')}>Geek</button>
         <button className={activeCategory === 'sports' ? 'active' : ''} onClick={() => setActiveCategory('sports')}>Desporto</button>
-        <button className={activeCategory === 'health' ? 'active' : ''} onClick={() => setActiveCategory('health')}>Saúde</button>
-        <button className={activeCategory === 'science' ? 'active' : ''} onClick={() => setActiveCategory('science')}>Ciências</button>
-        <button className={activeCategory === 'news' ? 'active' : ''} onClick={() => setActiveCategory('news')}>Notícias</button>
-        <button className={activeCategory === 'music' ? 'active' : ''} onClick={() => setActiveCategory('music')}>Música</button>
+        <button className={activeCategory === 'health' ? 'active' : ''} onClick={() => setActiveCategory('health')}>SaÃºde</button>
+        <button className={activeCategory === 'science' ? 'active' : ''} onClick={() => setActiveCategory('science')}>CiÃªncias</button>
+        <button className={activeCategory === 'news' ? 'active' : ''} onClick={() => setActiveCategory('news')}>NotÃ­cias</button>
+        <button className={activeCategory === 'music' ? 'active' : ''} onClick={() => setActiveCategory('music')}>MÃºsica</button>
       </div>
 
       <main className="main-content">
@@ -195,16 +224,16 @@ function App() {
           <textarea 
             value={newPost}
             onChange={(e) => setNewPost(e.target.value)}
-            placeholder="No que você está pensando?"
+            placeholder="No que vocÃª estÃ¡ pensando?"
           />
           <div className="music-search">
             <input
               type="text"
               value={musicSearch}
               onChange={(e) => setMusicSearch(e.target.value)}
-              placeholder="Procurar música..."
+              placeholder="Procurar mÃºsica..."
             />
-            <button onClick={searchMusic}>🔍</button>
+            <button onClick={searchMusic}>ðŸ”</button>
           </div>
 
           {musicResults.length > 0 && (
@@ -228,7 +257,7 @@ function App() {
                 <strong>{selectedMusic.title}</strong>
                 <span>{selectedMusic.artist.name}</span>
               </div>
-              <button onClick={() => setSelectedMusic(null)}>✕</button>
+              <button onClick={() => setSelectedMusic(null)}>âœ•</button>
             </div>
           )}
 
@@ -254,9 +283,9 @@ function App() {
               )}
 
               <div className="post-actions">
-                <button>❤️ {post.likes}</button>
-                <button>💬 {post.comments}</button>
-                <button>↗️ Compartilhar</button>
+                <button>â¤ï¸ {post.likes}</button>
+                <button>ðŸ’¬ {post.comments}</button>
+                <button>â†—ï¸ Compartilhar</button>
               </div>
             </article>
           ))}
@@ -268,7 +297,7 @@ function App() {
             <h2>Mundo Geek</h2>
             <div className="subcategories">
               <button className="active">Animes</button>
-              <button>Mangás</button>
+              <button>MangÃ¡s</button>
               <button>Jogos</button>
             </div>
             <div className="content-grid">
@@ -278,8 +307,8 @@ function App() {
                   <h3>{anime.title}</h3>
                   <p>{anime.synopsis}</p>
                   <div className="card-stats">
-                    <span>⭐ {anime.score}</span>
-                    <span>👥 {anime.members}</span>
+                    <span>â­ {anime.score}</span>
+                    <span>ðŸ‘¥ {anime.members}</span>
                   </div>
                 </div>
               ))}
@@ -307,7 +336,7 @@ function App() {
 
         {activeCategory === 'health' && (
           <div className="category-content health">
-            <h2>Saúde</h2>
+            <h2>SaÃºde</h2>
             <div className="health-grid">
               {healthData.map(item => (
                 <div key={item.Id} className="health-card">
@@ -324,7 +353,7 @@ function App() {
 
         {activeCategory === 'science' && (
           <div className="category-content science">
-            <h2>Ciências</h2>
+            <h2>CiÃªncias</h2>
             <div className="calculator">
               <input 
                 type="text" 
@@ -340,7 +369,7 @@ function App() {
 
         {activeCategory === 'news' && (
           <div className="category-content news">
-            <h2>Notícias</h2>
+            <h2>NotÃ­cias</h2>
             <div className="news-grid">
               {newsData.map((news, index) => (
                 <div key={index} className="news-card">
