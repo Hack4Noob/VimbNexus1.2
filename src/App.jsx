@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
@@ -145,7 +144,7 @@ function App() {
 
   const handleNewPost = () => {
     if (!newPost.trim() && !selectedMusic) return
-    
+
     const post = {
       id: posts.length + 1,
       author: {
@@ -158,7 +157,7 @@ function App() {
       comments: 0,
       timestamp: 'agora'
     }
-    
+
     setPosts([post, ...posts])
     setNewPost('')
   }
@@ -190,6 +189,16 @@ function App() {
 
       <main className="main-content">
         <div className="stories">
+          <div className="story new-story">
+            <MediaUpload 
+              type="image" 
+              onUpload={(url) => {
+                // Adicionar novo story
+                console.log("Novo story:", url);
+              }} 
+            />
+            <span>Novo Story</span>
+          </div>
           {[1,2,3,4,5].map(i => (
             <div key={i} className="story">
               <img src={`https://i.pravatar.cc/150?img=${i+5}`} alt="story" />
@@ -214,7 +223,7 @@ function App() {
             />
             <button onClick={searchMusic}>🔍</button>
           </div>
-          
+
           {musicResults.length > 0 && (
             <div className="music-results">
               {musicResults.map(track => (
@@ -228,7 +237,7 @@ function App() {
               ))}
             </div>
           )}
-          
+
           {selectedMusic && (
             <div className="selected-music">
               <img src={selectedMusic.album.cover_medium} alt={selectedMusic.title} />
@@ -239,7 +248,7 @@ function App() {
               <button onClick={() => setSelectedMusic(null)}>✕</button>
             </div>
           )}
-          
+
           <button onClick={handleNewPost}>Publicar</button>
         </div>
 
@@ -254,13 +263,13 @@ function App() {
                   <span>{post.timestamp}</span>
                 </div>
               </div>
-              
+
               <p>{post.content}</p>
-              
+
               {post.image && (
                 <img src={post.image} alt="Post content" className="post-image" />
               )}
-              
+
               <div className="post-actions">
                 <button>❤️ {post.likes}</button>
                 <button>💬 {post.comments}</button>
