@@ -3,6 +3,6 @@ import {Cloudinary} from "@cloudinary/url-gen";
 
 export const cld = new Cloudinary({
   cloud: {
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME
+  cloudName: process.env.CLOUDINARY_CLOUD_NAME || "Estanislau"
   }
 });
