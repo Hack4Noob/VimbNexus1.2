@@ -18,7 +18,11 @@ const MediaEditor = ({ file, onSave }) => {
     }
   });
 
-  const myImage = cld.image(file.public_id)
+  const mediaResource = file.resource_type === 'video' 
+    ? cld.video(file.public_id)
+    : cld.image(file.public_id);
+
+  const myMedia = mediaResource
     .resize(fill().width(800).height(600))
     .adjust(brightness(bright))
     .adjust(saturation(sat))
