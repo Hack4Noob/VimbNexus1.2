@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 function App() {
   const [activeCategory, setActiveCategory] = useState('feed')
@@ -8,9 +9,91 @@ function App() {
   const [musicResults, setMusicResults] = useState([])
   const [selectedMusic, setSelectedMusic] = useState(null)
   const [animeData, setAnimeData] = useState([])
+  const [mangaData, setMangaData] = useState([])
+  const [gamesData, setGamesData] = useState([])
   const [sportsData, setSportsData] = useState([])
+  const [healthData, setHealthData] = useState([])
   const [scienceData, setScienceData] = useState([])
   const [newsData, setNewsData] = useState([])
+  const [calculation, setCalculation] = useState('')
+  const [calcResult, setCalcResult] = useState('')
+
+  const fetchAnimeData = async () => {
+    try {
+      const response = await axios.get('https://api.jikan.moe/v4/top/anime')
+      setAnimeData(response.data.data.slice(0, 10))
+    } catch (error) {
+      console.error('Error fetching anime:', error)
+    }
+  }
+
+  const fetchMangaData = async () => {
+    try {
+      const response = await axios.get('https://api.jikan.moe/v4/top/manga')
+      setMangaData(response.data.data.slice(0, 10))
+    } catch (error) {
+      console.error('Error fetching manga:', error)
+    }
+  }
+
+  const fetchGamesData = async () => {
+    try {
+      const response = await axios.get('https://api.rawg.io/api/games?key=YOUR_API_KEY')
+      setGamesData(response.data.results)
+    } catch (error) {
+      console.error('Error fetching games:', error)
+    }
+  }
+
+  const fetchSportsData = async () => {
+    try {
+      const response = await axios.get('https://www.scorebat.com/video-api/v3/')
+      setSportsData(response.data.response.slice(0, 10))
+    } catch (error) {
+      console.error('Error fetching sports:', error)
+    }
+  }
+
+  const fetchHealthData = async () => {
+    try {
+      const response = await axios.get('https://health.gov/myhealthfinder/api/v3/topicsearch.json')
+      setHealthData(response.data.Result.Resources.Resource)
+    } catch (error) {
+      console.error('Error fetching health:', error)
+    }
+  }
+
+  const fetchNewsData = async () => {
+    try {
+      const response = await axios.get('https://newsapi.org/v2/top-headlines?country=us&apiKey=YOUR_API_KEY')
+      setNewsData(response.data.articles)
+    } catch (error) {
+      console.error('Error fetching news:', error)
+    }
+  }
+
+  const calculateResult = async () => {
+    try {
+      const response = await axios.get(`https://api.mathjs.org/v4/?expr=${encodeURIComponent(calculation)}`)
+      setCalcResult(response.data)
+    } catch (error) {
+      console.error('Error calculating:', error)
+    }
+  }
+
+  useEffect(() => {
+    if (activeCategory === 'geek') {
+      fetchAnimeData()
+      fetchMangaData()
+      fetchGamesData()
+    } else if (activeCategory === 'sports') {
+      fetchSportsData()
+    } else if (activeCategory === 'health') {
+      fetchHealthData()
+    } else if (activeCategory === 'news') {
+      fetchNewsData()
+    }
+  }, [activeCategory])
   const [posts, setPosts] = useState([
     {
       id: 1,
@@ -177,16 +260,20 @@ function App() {
           <div className="category-content geek">
             <h2>Mundo Geek</h2>
             <div className="subcategories">
-              <button onClick={() => fetchAnimeData()}>Animes</button>
-              <button onClick={() => fetchMangaData()}>Mangás</button>
-              <button onClick={() => fetchGamesData()}>Jogos</button>
+              <button className="active">Animes</button>
+              <button>Mangás</button>
+              <button>Jogos</button>
             </div>
             <div className="content-grid">
               {animeData.map(anime => (
-                <div key={anime.id} className="content-card">
-                  <img src={anime.image} alt={anime.title} />
+                <div key={anime.mal_id} className="content-card">
+                  <img src={anime.images.jpg.image_url} alt={anime.title} />
                   <h3>{anime.title}</h3>
-                  <p>{anime.description}</p>
+                  <p>{anime.synopsis}</p>
+                  <div className="card-stats">
+                    <span>⭐ {anime.score}</span>
+                    <span>👥 {anime.members}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -198,10 +285,30 @@ function App() {
             <h2>Desporto</h2>
             <div className="sports-grid">
               {sportsData.map(event => (
-                <div key={event.id} className="sports-card">
+                <div key={event.title} className="sports-card">
+                  <img src={event.thumbnail} alt={event.title} />
                   <h3>{event.title}</h3>
-                  <p>{event.description}</p>
-                  <div className="score">{event.score}</div>
+                  <p>{event.competition}</p>
+                  <a href={event.matchviewUrl} target="_blank" rel="noopener noreferrer">
+                    Ver Highlights
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeCategory === 'health' && (
+          <div className="category-content health">
+            <h2>Saúde</h2>
+            <div className="health-grid">
+              {healthData.map(item => (
+                <div key={item.Id} className="health-card">
+                  <h3>{item.Title}</h3>
+                  <p>{item.Categories}</p>
+                  <a href={item.AccessibleVersion} target="_blank" rel="noopener noreferrer">
+                    Ler mais
+                  </a>
                 </div>
               ))}
             </div>
@@ -212,16 +319,14 @@ function App() {
           <div className="category-content science">
             <h2>Ciências</h2>
             <div className="calculator">
-              <input type="text" placeholder="Expressão matemática" />
-              <button>Calcular</button>
-            </div>
-            <div className="science-content">
-              {scienceData.map(item => (
-                <div key={item.id} className="science-card">
-                  <h3>{item.title}</h3>
-                  <p>{item.content}</p>
-                </div>
-              ))}
+              <input 
+                type="text" 
+                value={calculation}
+                onChange={(e) => setCalculation(e.target.value)}
+                placeholder="Ex: 2 + 2 * 3"
+              />
+              <button onClick={calculateResult}>Calcular</button>
+              {calcResult && <div className="calc-result">Resultado: {calcResult}</div>}
             </div>
           </div>
         )}
@@ -230,11 +335,14 @@ function App() {
           <div className="category-content news">
             <h2>Notícias</h2>
             <div className="news-grid">
-              {newsData.map(news => (
-                <div key={news.id} className="news-card">
-                  <img src={news.image} alt={news.title} />
+              {newsData.map((news, index) => (
+                <div key={index} className="news-card">
+                  <img src={news.urlToImage || 'https://via.placeholder.com/300x200'} alt={news.title} />
                   <h3>{news.title}</h3>
-                  <p>{news.summary}</p>
+                  <p>{news.description}</p>
+                  <a href={news.url} target="_blank" rel="noopener noreferrer">
+                    Ler mais
+                  </a>
                 </div>
               ))}
             </div>
