@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 
 function App() {
   const [newPost, setNewPost] = useState('')
+  const [musicSearch, setMusicSearch] = useState('')
+  const [musicResults, setMusicResults] = useState([])
+  const [selectedMusic, setSelectedMusic] = useState(null)
   const [posts, setPosts] = useState([
     {
       id: 1,
@@ -30,20 +33,15 @@ function App() {
     }
   ])
 
-  const [selectedMedia, setSelectedMedia] = useState(null)
-  const [editingMedia, setEditingMedia] = useState(false)
-
-  const handleMediaSelect = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => setSelectedMedia(e.target.result)
-      reader.readAsDataURL(file)
-    }
+  const searchMusic = async () => {
+    if (!musicSearch.trim()) return
+    const response = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(musicSearch)}&limit=5`)
+    const data = await response.json()
+    setMusicResults(data.data || [])
   }
 
   const handleNewPost = () => {
-    if (!newPost.trim() && !selectedMedia) return
+    if (!newPost.trim() && !selectedMusic) return
     
     const post = {
       id: posts.length + 1,
@@ -52,7 +50,7 @@ function App() {
         avatar: 'https://i.pravatar.cc/150?img=3'
       },
       content: newPost,
-      media: selectedMedia,
+      music: selectedMusic,
       likes: 0,
       comments: 0,
       timestamp: 'agora'
@@ -60,8 +58,6 @@ function App() {
     
     setPosts([post, ...posts])
     setNewPost('')
-    setSelectedMedia(null)
-    setEditingMedia(false)
   }
 
   return (
@@ -88,43 +84,47 @@ function App() {
 
         <div className="post-form">
           <img src="https://i.pravatar.cc/150?img=3" alt="Your avatar" />
-          <div className="post-form-content">
-            <textarea 
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-              placeholder="No que você está pensando?"
+          <textarea 
+            value={newPost}
+            onChange={(e) => setNewPost(e.target.value)}
+            placeholder="No que você está pensando?"
+          />
+          <div className="music-search">
+            <input
+              type="text"
+              value={musicSearch}
+              onChange={(e) => setMusicSearch(e.target.value)}
+              placeholder="Procurar música..."
             />
-            
-            {selectedMedia && (
-              <div className="media-preview">
-                <img src={selectedMedia} alt="Preview" />
-                {editingMedia && (
-                  <div className="media-editor">
-                    <button onClick={() => {/* Adicionar filtros */}}>Filtros</button>
-                    <button onClick={() => {/* Adicionar corte */}}>Cortar</button>
-                    <button onClick={() => {/* Adicionar texto */}}>Texto</button>
-                    <button onClick={() => {/* Adicionar efeitos */}}>Efeitos</button>
-                  </div>
-                )}
-                <button className="edit-media" onClick={() => setEditingMedia(!editingMedia)}>
-                  ✏️ Editar
-                </button>
-              </div>
-            )}
-            
-            <div className="post-actions">
-              <label className="media-button">
-                📷 Foto/Vídeo
-                <input 
-                  type="file" 
-                  accept="image/*,video/*" 
-                  onChange={handleMediaSelect}
-                  style={{display: 'none'}}
-                />
-              </label>
-              <button onClick={handleNewPost}>Publicar</button>
-            </div>
+            <button onClick={searchMusic}>🔍</button>
           </div>
+          
+          {musicResults.length > 0 && (
+            <div className="music-results">
+              {musicResults.map(track => (
+                <div key={track.id} className="music-result" onClick={() => setSelectedMusic(track)}>
+                  <img src={track.album.cover_small} alt={track.title} />
+                  <div>
+                    <strong>{track.title}</strong>
+                    <span>{track.artist.name}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {selectedMusic && (
+            <div className="selected-music">
+              <img src={selectedMusic.album.cover_medium} alt={selectedMusic.title} />
+              <div>
+                <strong>{selectedMusic.title}</strong>
+                <span>{selectedMusic.artist.name}</span>
+              </div>
+              <button onClick={() => setSelectedMusic(null)}>✕</button>
+            </div>
+          )}
+          
+          <button onClick={handleNewPost}>Publicar</button>
         </div>
 
         <div className="feed">

@@ -256,6 +256,59 @@ button:hover {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.music-search {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.music-search input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.music-results {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.music-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.music-result:hover {
+  background: #f0f2f5;
+}
+
+.music-result img {
+  width: 40px;
+  height: 40px;
+}
+
+.selected-music {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #f0f2f5;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.selected-music img {
+  width: 60px;
+  height: 60px;
+}
+
 .post-form textarea {
   width: 100%;
   padding: 10px;
