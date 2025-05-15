@@ -196,13 +196,13 @@ function App() {
       <header className="header">
         <h1>SocialApp</h1>
         <div className="header-icons">
-          <span onClick={() => setActiveCategory('feed')}>ðŸ </span>
-          <span onClick={() => setActiveCategory('geek')}>ðŸŽ®</span>
-          <span onClick={() => setActiveCategory('sports')}>âš½</span>
-          <span onClick={() => setActiveCategory('health')}>ðŸ¥</span>
-          <span onClick={() => setActiveCategory('science')}>ðŸ”¬</span>
-          <span onClick={() => setActiveCategory('news')}>ðŸ“°</span>
-          <span onClick={() => setActiveCategory('music')}>ðŸŽµ</span>
+          <span onClick={() => setActiveCategory('feed')}>🏠</span>
+<span onClick={() => setActiveCategory('geek')}>🎮</span>
+<span onClick={() => setActiveCategory('sports')}>⚽</span>
+<span onClick={() => setActiveCategory('health')}>🩺</span>
+<span onClick={() => setActiveCategory('science')}>🔬</span>
+<span onClick={() => setActiveCategory('news')}>📰</span>
+<span onClick={() => setActiveCategory('music')}>🎵</span>
         </div>
       </header>
 
