@@ -188,24 +188,7 @@ function App() {
       </div>
 
       <main className="main-content">
-        <div className="stories">
-          <div className="story new-story">
-            <MediaUpload 
-              type="image" 
-              onUpload={(url) => {
-                // Adicionar novo story
-                console.log("Novo story:", url);
-              }} 
-            />
-            <span>Novo Story</span>
-          </div>
-          {[1,2,3,4,5].map(i => (
-            <div key={i} className="story">
-              <img src={`https://i.pravatar.cc/150?img=${i+5}`} alt="story" />
-              <span>User {i}</span>
-            </div>
-          ))}
-        </div>
+        <Stories />
 
         <div className="post-form">
           <img src="https://i.pravatar.cc/150?img=3" alt="Your avatar" />
